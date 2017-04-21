@@ -472,9 +472,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextWaypointDistance: 3
   targetPosition: {x: 0, y: 0, z: 0}
-  SlowSpeed: 2
-  NormalSpeed: 3
-  FastSpeed: 4
+  SlowSpeed: 5
+  NormalSpeed: 8
+  FastSpeed: 10
   DetectionAngle: 45
   AlertTime: 2
   AlertLevel: 1
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Height: 2
-  Speed: 2
+  Speed: 8
   HP: 10
   Armor: 10
   Level: 0

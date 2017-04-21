@@ -43,8 +43,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 10
   Piercing: 1
-  Material: {fileID: 0}
-  HitClip: {fileID: 0}
+  Material: {fileID: 2100000, guid: 1bbee188925a44c198de0838c6157302, type: 2}
+  HitClip: {fileID: 8300000, guid: aabf7b7b64c0b411c9a2c9408c7477c6, type: 3}
   Owner: {fileID: 0}
   Forward: {x: 0, y: 0, z: 0}
 --- !u!120 &12094734

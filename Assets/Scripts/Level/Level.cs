@@ -424,7 +424,7 @@ public class Level : MonoBehaviour
             var lev = Mathf.Max(room.Level - (Random.value < 0.4 ? 1 : 0), 0);
             for (int i = 0; i < 4; ++i)
             {
-                if (room.Neighbors[i] == null) continue;
+                if (room.Neighbors[i] == null || room.Level <= 1) continue;
 
                 var p = Vector3.zero;
                 switch (i)

@@ -198,7 +198,10 @@ public class Guard : MonoBehaviour
 
     public void OnPathComplete(Path p)
     {
-        if (p.error) return;
+        if (p.error) {
+            Debug.LogError(p.errorLog);
+            return;
+        }
         path = p;
         currentWaypoint = 0;
         _awaitingPath = false;
