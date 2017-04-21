@@ -470,11 +470,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b35483e7fb43d472fb0e4bacfa4e021b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextWaypointDistance: 3
+  nextWaypointDistance: 1
   targetPosition: {x: 0, y: 0, z: 0}
-  SlowSpeed: 5
-  NormalSpeed: 8
-  FastSpeed: 10
+  SlowSpeed: 3
+  NormalSpeed: 5
+  FastSpeed: 6
   DetectionAngle: 45
   AlertTime: 2
   AlertLevel: 1
@@ -493,10 +493,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smoothType: 0
   subdivisions: 2
-  iterations: 2
-  strength: 0.2
+  iterations: 4
+  strength: 0.05
   uniformLength: 1
-  maxSegmentLength: 2
+  maxSegmentLength: 0.5
   bezierTangentLength: 0.1
   offset: 0.2
   factor: 0.1

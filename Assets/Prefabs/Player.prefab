@@ -493,7 +493,7 @@ MonoBehaviour:
   NodeMaterial: {fileID: 2100000, guid: f27ba9061ae7842f1a62af6f45cf0c33, type: 2}
   PlaneMaterial: {fileID: 2100000, guid: a6d71b4d3136d4e58b2e2b08d2d2e548, type: 2}
   NodeLabel: {fileID: 22400510, guid: 87fd8ef6c60984ca3bedcc12aefbe82d, type: 2}
-  TeleClip: {fileID: 0}
+  TeleClip: {fileID: 8300000, guid: df146f2d75d0a449ebd78932d6e5d5b1, type: 3}
 --- !u!114 &11493676
 MonoBehaviour:
   m_ObjectHideFlags: 1

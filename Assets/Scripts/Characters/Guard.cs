@@ -102,7 +102,7 @@ public class Guard : MonoBehaviour
         }
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         if (path != null)
         {
@@ -125,7 +125,7 @@ public class Guard : MonoBehaviour
             {
                 if (int.Parse(patrol.name.Split('-')[0]) != human.Level) continue;
                 var value = _patrols[patrol];
-                _patrols[patrol] = value + Time.deltaTime;
+                _patrols[patrol] = value + Time.fixedDeltaTime;
                 if (maxt < value)
                 {
                     maxt = value;
@@ -205,5 +205,11 @@ public class Guard : MonoBehaviour
         path = p;
         currentWaypoint = 0;
         _awaitingPath = false;
+
+        for (var i = 1; i < p.vectorPath.Count; i++) {
+            var a = p.vectorPath[i-1];
+            var b = p.vectorPath[i];
+            Debug.DrawLine(a,b);
+        }
     }
 }
