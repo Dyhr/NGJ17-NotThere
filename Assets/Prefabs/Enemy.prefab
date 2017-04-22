@@ -472,11 +472,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextWaypointDistance: 1
   targetPosition: {x: 0, y: 0, z: 0}
-  slowSpeed: 4
-  normalSpeed: 6
-  fastSpeed: 8
+  slowSpeed: 1
+  normalSpeed: 2
+  fastSpeed: 4
   detectionAngle: 45
-  alertTime: 4
+  alertTime: 1.5
   alertLevel: 0
   alarmSound: {fileID: 8300000, guid: 3edb48b2a533b4abd81845189eb1d444, type: 3}
   canSeePlayer: 0

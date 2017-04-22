@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 2
-  speed: 7
+  speed: 5
   hp: 10
   armor: 10
   level: 0
