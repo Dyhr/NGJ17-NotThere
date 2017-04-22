@@ -288,4 +288,9 @@ public class Room : MonoBehaviour {
         room.size = size;
         return room;
     }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(transform.position+Vector3.up*(level+2), new Vector3(0.2f, (level+2)*2, 0.2f));
+    }
 }
