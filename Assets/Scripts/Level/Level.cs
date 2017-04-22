@@ -11,6 +11,8 @@ public class Level : MonoBehaviour {
     public int rooms;
     public int tries;
 
+    public AstarPath aStar;
+
     public Vector2 minRoomSize;
     public Vector2 maxRoomSize;
 
@@ -151,6 +153,8 @@ public class Level : MonoBehaviour {
             }
         }
 
+        // Define the rooms from here
+
         var end = map[0].Furthest();
         var start = end.Furthest();
 
@@ -158,8 +162,7 @@ public class Level : MonoBehaviour {
         start.Spawn(roomSettings.terminal.transform, 2);
 
         var path = start.Path(end);
-        var branches = path.Select(room => room.neighbors.Where(r => r != null && !path.Contains(r)).ToArray())
-            .ToList();
+        var branches = path.Select(room => room.neighbors.Where(r => r != null && !path.Contains(r)).ToArray()).ToList();
         var lev = 0;
         var l = 0;
         foreach (var branch in branches) {
@@ -267,6 +270,7 @@ public class Level : MonoBehaviour {
             network[j].neighbors.Add(network[i]);
         }
 
+        aStar.Scan();
         //var merger = new GameObject("Merger").AddComponent<MergeMesh>();
         //merger.transform.parent = transform;
         //merger.Merge(GameObject.FindGameObjectsWithTag("Merge").Select(g=>g.transform).ToArray());
@@ -278,6 +282,7 @@ public class Level : MonoBehaviour {
         public float wallHeight = 2;
         public float doorWidth = 2;
         public float doorHeight = 2;
+        public float lampHeight = 4;
         public Material wallMaterial;
         public Material floorMaterial;
         public Door door;

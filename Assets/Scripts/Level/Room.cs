@@ -62,6 +62,14 @@ public class Room : MonoBehaviour {
 	        }
 	    }
 
+	    var lamp = new GameObject("Lamp", typeof(Light)).GetComponent<Light>();
+	    lamp.transform.parent = transform;
+	    lamp.transform.localPosition = Vector3.up * settings.lampHeight;
+	    lamp.transform.LookAt(transform);
+	    lamp.range = settings.lampHeight * 2 * Mathf.Min(size.x, size.y);
+	    lamp.spotAngle = 100;
+	    lamp.type = LightType.Spot;
+
 	    var wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(settings.wallThickness, settings.wallHeight,
