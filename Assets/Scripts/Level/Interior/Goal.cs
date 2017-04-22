@@ -66,7 +66,7 @@ public class Goal : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(speed2);
-            target = Vector3.up*(++i%2 == 0 ? 0.2f : 1.5f);
+            target = Vector3.up*(++i%2 == 0 ? 0.4f : 1.1f);
         }
     }
 }
