@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Human))]
 public class Player : MonoBehaviour
@@ -10,9 +11,13 @@ public class Player : MonoBehaviour
 
     public Material nodeMaterial;
     public Material planeMaterial;
+    public Material wallMaterial;
     public Transform nodeLabel;
     public AudioClip teleClip;
 
+    public bool invisible;
+
+    private Color initialColor;
     private HackMode hacker;
     private Networkable hack;
     public Networkable Hack
@@ -37,8 +42,9 @@ public class Player : MonoBehaviour
     private Human human;
     private GameObject[] switches;
 
-    private void Start()
-    {
+    private void Start() {
+        initialColor = GetComponentInChildren<Renderer>().material.color;
+
         if (Guard.player == null)
             Guard.player = GameObject.FindGameObjectWithTag("Player").transform;
         if (Guard.playerr == null)
@@ -72,21 +78,29 @@ public class Player : MonoBehaviour
         if (Hack == null)
         {
             human.inputControl = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-            human.inputFire = Input.GetButtonDown("Fire1") && Input.GetButton("Fire2");
-            human.inputAim = Input.GetButton("Fire2");
+            human.inputFire = Input.GetButtonDown("Fire1") && Input.GetButton("Fire2") && false;
+            human.inputAim = Input.GetButton("Fire2") && false;
+            if (Input.GetKeyDown(KeyCode.E))
+                invisible = !invisible;
+            if (human.inputControl.magnitude > 0) invisible = false;
 
             Camera.transform.position = transform.position - Camera.transform.forward*40;
             if (Input.GetAxisRaw("Fire2") > 0) human.idleLook();
 
             Cursor.lockState = CursorLockMode.None;
         }
-        else
-        {
+        else {
+            invisible = false;
             Camera.transform.position += human.right*Input.GetAxisRaw("Mouse X") +
                                          human.forward*Input.GetAxisRaw("Mouse Y");
 
             Cursor.lockState = CursorLockMode.Locked;
         }
+
+        var render = GetComponentInChildren<Renderer>();
+        var targetColor = wallMaterial.color;
+        targetColor.a = 0f;
+        render.material.color = Color.Lerp(render.material.color, invisible ? targetColor : initialColor, 0.05f);
 
         if (Label.instance != null)
             Label.instance.Target = null;

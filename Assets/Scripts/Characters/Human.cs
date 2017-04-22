@@ -47,8 +47,8 @@ public class Human : MonoBehaviour
 
     private void Update()
     {
-        if (hp <= 0)
-        {
+        if (hp <= 0) {
+            if (GetComponent<Guard>()) GetComponent<Guard>().PleaseDie();
             Destroy(gameObject);
             return;
         }

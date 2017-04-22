@@ -53,8 +53,7 @@ public class Guard : MonoBehaviour
                 Patrols.Add(go.transform, 0);
     }
 
-    private void OnDestroy()
-    {
+    public void PleaseDie() {
         StopAllCoroutines();
         Reinforce();
     }
@@ -164,11 +163,14 @@ public class Guard : MonoBehaviour
                 }
             }
         }
+
+        if (canSeePlayer && player != null) player.GetComponent<Player>().invisible = false;
+
         canSeePlayer = false;
         var dir = player != null ? (player.position - transform.position).normalized : Vector3.zero;
         if (player != null && Physics.Raycast(transform.position, dir, out hit))
         {
-            if (hit.transform == player && Vector3.Dot(dir, transform.forward) > Mathf.Cos(detectionAngle * Mathf.Deg2Rad))
+            if (hit.transform == player && !player.GetComponent<Player>().invisible && Vector3.Dot(dir, transform.forward) > Mathf.Cos(detectionAngle * Mathf.Deg2Rad))
             {
                 canSeePlayer = true;
                 if (!awaitingPath && Vector3.Distance(player.position, targetPosition) > 1)
