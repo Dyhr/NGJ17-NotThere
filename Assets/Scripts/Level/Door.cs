@@ -10,7 +10,7 @@ public class Door : MonoBehaviour
 
     public int Level
     {
-        get { return GetComponent<Networkable>().Level; }
+        get { return GetComponent<Networkable>().level; }
     }
 
     private float time;
@@ -33,27 +33,27 @@ public class Door : MonoBehaviour
         transform.GetChild(0).localPosition = Vector3.right * (0.5f - s/2);
         transform.GetChild(1).localPosition = -Vector3.right * (0.5f - s/2);
 
-        GetComponent<Networkable>().Status = Open ? "Open" : "Closed";
-        GetComponent<Networkable>().Action = Open ? "Close" : "Open";
+        GetComponent<Networkable>().status = Open ? "Open" : "Closed";
+        GetComponent<Networkable>().action = Open ? "Close" : "Open";
     }
 
     public void Activate(Creds creds)
     {
         if(guarded) return;
 
-        if (creds.Level < Level)
+        if (creds.level < Level)
         {
-            if (creds.Owner != null && creds.Owner.CompareTag("Guard")) creds.Owner.SendMessage("Interrupt");
+            if (creds.owner != null && creds.owner.CompareTag("Guard")) creds.owner.SendMessage("Interrupt");
             return;
         }
-        guarded = creds.Owner != null && creds.Owner.CompareTag("Guard");
+        guarded = creds.owner != null && creds.owner.CompareTag("Guard");
 
         Open = !Open || guarded;
 
         if (guarded)
             StartCoroutine(Unguard());
         else
-            GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>().PlayOneShot(GetComponent<Networkable>().ActivateClip);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>().PlayOneShot(GetComponent<Networkable>().activateClip);
     }
 
     IEnumerator Unguard()

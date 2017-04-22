@@ -15,26 +15,26 @@ public class Cabinet : MonoBehaviour
 
     public int Level
     {
-        get { return GetComponent<Networkable>().Level; }
+        get { return GetComponent<Networkable>().level; }
     }
 
     private void Update()
     {
-        if (Guard._player != null && Guard._player.GetComponent<Player>() != null)
-            net.Action = Guard._player.GetComponent<Player>().Hack == null ? "" : "Unlock";
+        if (Guard.player != null && Guard.player.GetComponent<Player>() != null)
+            net.action = Guard.player.GetComponent<Player>().Hack == null ? "" : "Unlock";
     }
 
     public void Activate(Creds creds)
     {
-        if (Opened || creds.Level < Level || !GetComponent<Networkable>().Hacked) return;
+        if (Opened || creds.level < Level || !GetComponent<Networkable>().hacked) return;
 
-        net.Status = "Unlocked";
+        net.status = "Unlocked";
         Opened = true;
         var card = Instantiate(Card);
         card.transform.position = transform.position + Vector3.up;
         card.GetComponent<Rigidbody>().AddForce(Random.onUnitSphere*5);
-        card.Level = net.Level + Random.Range(1, 3);
-        card.Player = Guard._player;
-        GetComponent<Light>().enabled = false; GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>().PlayOneShot(GetComponent<Networkable>().ActivateClip);
+        card.Level = net.level + Random.Range(1, 3);
+        card.Player = Guard.player;
+        GetComponent<Light>().enabled = false; GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>().PlayOneShot(GetComponent<Networkable>().activateClip);
     }
 }

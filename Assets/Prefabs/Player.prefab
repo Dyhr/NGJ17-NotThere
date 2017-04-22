@@ -489,11 +489,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 0}
-  ActivateDistance: 2
-  NodeMaterial: {fileID: 2100000, guid: f27ba9061ae7842f1a62af6f45cf0c33, type: 2}
-  PlaneMaterial: {fileID: 2100000, guid: a6d71b4d3136d4e58b2e2b08d2d2e548, type: 2}
-  NodeLabel: {fileID: 22400510, guid: 87fd8ef6c60984ca3bedcc12aefbe82d, type: 2}
-  TeleClip: {fileID: 8300000, guid: df146f2d75d0a449ebd78932d6e5d5b1, type: 3}
+  activateDistance: 2
+  nodeMaterial: {fileID: 2100000, guid: f27ba9061ae7842f1a62af6f45cf0c33, type: 2}
+  planeMaterial: {fileID: 2100000, guid: a6d71b4d3136d4e58b2e2b08d2d2e548, type: 2}
+  nodeLabel: {fileID: 22400510, guid: 87fd8ef6c60984ca3bedcc12aefbe82d, type: 2}
+  teleClip: {fileID: 8300000, guid: df146f2d75d0a449ebd78932d6e5d5b1, type: 3}
 --- !u!114 &11493676
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -505,12 +505,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf29e89cd8ab420590cb8e4cc92bba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Height: 2
-  Speed: 6
-  HP: 50
-  Armor: 10
-  Level: 1
-  AimCurve:
+  height: 2
+  speed: 7
+  hp: 10
+  armor: 10
+  level: 0
+  aimCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
@@ -528,13 +528,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  AimTimeMul: 1
-  InputControl: {x: 0, y: 0, z: 0}
-  InputAim: 0
-  InputFire: 0
-  Forward: {x: 0, y: 0, z: 1}
-  Right: {x: 1, y: 0, z: 0}
-  LockRot: 0
+  aimTimeMul: 3
+  inputControl: {x: 0, y: 0, z: 0}
+  inputAim: 0
+  inputFire: 0
+  forward: {x: 0, y: 0, z: 1}
+  right: {x: 1, y: 0, z: 0}
+  lockRot: 0
 --- !u!114 &11498676
 MonoBehaviour:
   m_ObjectHideFlags: 1

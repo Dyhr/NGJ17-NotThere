@@ -5,37 +5,37 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class Human : MonoBehaviour
 {
-    public float Height;
-    public float Speed;
+    public float height;
+    public float speed;
 
-    public float HP;
-    public float Armor;
-    public int Level;
+    public float hp;
+    public float armor;
+    public int level;
 
     public Creds Creds
     {
-        get { return new Creds(name, Level, this); }
+        get { return new Creds(name, level, this); }
     }
 
-    public AnimationCurve AimCurve;
-    public float AimTimeMul;
+    public AnimationCurve aimCurve;
+    public float aimTimeMul;
 
     [HideInInspector]
-    public Vector3 InputControl;
+    public Vector3 inputControl;
     [HideInInspector]
-    public bool InputAim;
+    public bool inputAim;
     [HideInInspector]
-    public bool InputFire;
+    public bool inputFire;
 
     [HideInInspector]
-    public Vector3 Forward = Vector3.forward;
+    public Vector3 forward = Vector3.forward;
     [HideInInspector]
-    public Vector3 Right = Vector3.right;
+    public Vector3 right = Vector3.right;
 
     [HideInInspector]
-    public Action IdleLook;
+    public Action idleLook;
     [HideInInspector]
-    public bool LockRot;
+    public bool lockRot;
 
     private Rigidbody _rigidbody;
     private float aimTime;
@@ -47,38 +47,38 @@ public class Human : MonoBehaviour
 
     private void Update()
     {
-        if (HP <= 0)
+        if (hp <= 0)
         {
             Destroy(gameObject);
             return;
         }
 
-        var move = (Forward*InputControl.z + Right*InputControl.x).normalized;
-        if (InputControl.magnitude == 0)
+        var move = (forward*inputControl.z + right*inputControl.x).normalized;
+        if (inputControl.magnitude == 0)
         {
-            if (IdleLook != null) IdleLook();
+            if (idleLook != null) idleLook();
         }
-        else if (!LockRot)
+        else if (!lockRot)
         {
             if(move.magnitude > 0)
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(move), 0.4f);
         }
-        _rigidbody.velocity = move*Speed;
+        _rigidbody.velocity = move*speed;
 
         var gun = GetComponentInChildren<Gun>();
         if (gun != null) {
-            aimTime += (InputAim ? -Time.deltaTime : Time.deltaTime) * AimTimeMul;
+            aimTime += (inputAim ? -Time.deltaTime : Time.deltaTime) * aimTimeMul;
             aimTime = Mathf.Clamp01(aimTime);
-            gun.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(90, 0, 0), Quaternion.Euler(0, 0, 0), AimCurve.Evaluate(aimTime));
-            if (InputFire && aimTime == 0)
+            gun.transform.localRotation = Quaternion.Slerp(Quaternion.Euler(90, 0, 0), Quaternion.Euler(0, 0, 0), aimCurve.Evaluate(aimTime));
+            if (inputFire && aimTime == 0)
             {
                 gun.Fire();
             }
         }
 
-        InputControl = Vector3.zero;
-        InputFire = false;
-        InputAim = false;
-        LockRot = false;
+        inputControl = Vector3.zero;
+        inputFire = false;
+        inputAim = false;
+        lockRot = false;
     }
 }

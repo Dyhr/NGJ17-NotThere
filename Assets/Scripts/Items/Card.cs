@@ -11,7 +11,7 @@ public class Card : MonoBehaviour
     {
         if (Player != null && Vector3.Distance(transform.position, Player.position) < 1.5)
         {
-            Player.GetComponent<Human>().Level = Mathf.Max(Player.GetComponent<Human>().Level, Level);
+            Player.GetComponent<Human>().level = Mathf.Max(Player.GetComponent<Human>().level, Level);
             Player.GetComponent<AudioSource>().PlayOneShot(PickupClip);
             Destroy(gameObject);
         }

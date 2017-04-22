@@ -215,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 11426820, guid: f9eefdc316c64404184953cde415e041, type: 2}
   Finished: 0
-  TeleClip: {fileID: 0}
+  TeleClip: {fileID: 8300000, guid: df146f2d75d0a449ebd78932d6e5d5b1, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

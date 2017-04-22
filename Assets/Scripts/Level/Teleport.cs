@@ -38,7 +38,7 @@ public class Teleport : MonoBehaviour
         yield return new WaitForSeconds(3);
         On = true;
         player = ((Player) Instantiate(Player, transform.position, Quaternion.identity)).transform;
-        FindObjectOfType<Goal>().Player = player;
+        FindObjectOfType<Goal>().player = player;
     }
     IEnumerator Cycle()
     {

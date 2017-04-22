@@ -5,45 +5,45 @@ using UnityEngine.Rendering;
 
 public class HackMode : MonoBehaviour
 {
-    private int Level = 0;
+    private int level = 0;
 
-    public Material NodeMaterial;
-    public Material PlaneMaterial;
-    public Transform NodeLabel;
+    public Material nodeMaterial;
+    public Material planeMaterial;
+    public Transform nodeLabel;
 
     public Networkable Origin
     {
         set
         {
             MakePlane();
-            Level = value.Level;
+            level = value.level;
             DrawNode(value, true);
             DoLines(value);
         }
     }
 
     private Networkable[] items;
-    private readonly HashSet<Networkable> LogA = new HashSet<Networkable>();
-    private readonly HashSet<Networkable> LogB = new HashSet<Networkable>();
+    private readonly HashSet<Networkable> logA = new HashSet<Networkable>();
+    private readonly HashSet<Networkable> logB = new HashSet<Networkable>();
 
     private void DoLines(Networkable n)
     {
-        if (LogA.Contains(n)) return;
-        LogA.Add(n);
+        if (logA.Contains(n)) return;
+        logA.Add(n);
         DrawNode(n);
-        foreach (var neighbor in n.Neighbors)
+        foreach (var neighbor in n.neighbors)
         {
             DrawNode(neighbor);
             MakeLine(n,neighbor);
-            if (neighbor.Level <= Level && neighbor.Hacked)
+            if (neighbor.level <= level && neighbor.hacked)
                 DoLines(neighbor);
         }
     }
 
     private void DrawNode(Networkable n, bool hacked = false)
     {
-        if (LogB.Contains(n)) return;
-        LogB.Add(n);
+        if (logB.Contains(n)) return;
+        logB.Add(n);
         var dir = -Camera.main.transform.forward;
 
         var circle = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
@@ -51,10 +51,10 @@ public class HackMode : MonoBehaviour
         circle.parent = transform;
         circle.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
         circle.GetComponent<MeshRenderer>().receiveShadows = false;
-        circle.GetComponent<MeshRenderer>().sharedMaterial = NodeMaterial;
-        circle.gameObject.AddComponent<NetNode>().Label = NodeLabel;
+        circle.GetComponent<MeshRenderer>().sharedMaterial = nodeMaterial;
+        circle.gameObject.AddComponent<NetNode>().label = nodeLabel;
         circle.GetComponent<NetNode>().Origin = n;
-        circle.GetComponent<NetNode>().CanHack = n.Level <= Level;
+        circle.GetComponent<NetNode>().canHack = n.level <= level;
         if (hacked) circle.GetComponent<NetNode>().Hacked = true;
     }
 
@@ -66,7 +66,7 @@ public class HackMode : MonoBehaviour
         plane.parent = transform;
         plane.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
         plane.GetComponent<MeshRenderer>().receiveShadows = false;
-        plane.GetComponent<MeshRenderer>().sharedMaterial = PlaneMaterial;
+        plane.GetComponent<MeshRenderer>().sharedMaterial = planeMaterial;
     }
 
     private void MakeLine(Networkable a, Networkable b)
@@ -78,7 +78,7 @@ public class HackMode : MonoBehaviour
         line.SetWidth(0.4f, 0.4f);
         line.SetPosition(0, a.transform.position + dir * 7);
         line.SetPosition(1, b.transform.position + dir * 7);
-        line.sharedMaterial = NodeMaterial;
+        line.sharedMaterial = nodeMaterial;
     }
 
     private void Update()
@@ -90,10 +90,10 @@ public class HackMode : MonoBehaviour
             var node = hit.transform.GetComponent<NetNode>();
             if (node != null)
             {
-                node.Hover = true;
+                node.hover = true;
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    node.Activate(new Creds("Hack",Level, GameObject.FindGameObjectWithTag("Player").GetComponent<Human>()));
+                    node.Activate(new Creds("Hack",level, GameObject.FindGameObjectWithTag("Player").GetComponent<Human>()));
                     if (node.Hacked)
                     {
                         DoLines(node.Origin);

@@ -5,60 +5,60 @@ using UnityEngine.UI;
 
 public class NetNode : MonoBehaviour
 {
-    private Networkable _origin;
+    private Networkable origin;
     private Transform canvas;
     private Text text;
 
     public bool Hacked
     {
-        get { return _origin.Hacked; }
-        set { _origin.Hacked = true; }
+        get { return origin.hacked; }
+        set { origin.hacked = true; }
     }
 
-    public bool CanHack;
-    public bool Hover;
-    public Transform Label;
+    public bool canHack;
+    public bool hover;
+    public Transform label;
 
     public Networkable Origin
     {
         set
         {
-            _origin = value;
-            canvas = Instantiate(Label);
+            origin = value;
+            canvas = Instantiate(label);
             canvas.SetParent(transform, true);
             canvas.position = transform.position;
             canvas.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
             canvas.SetParent(transform.parent, true);
             text = canvas.GetComponentInChildren<Text>();
 
-            text.text = Roman(value.Level) + " HACK " + Garble(value.Name + " - " + value.Status);
+            text.text = Roman(value.level) + " HACK " + Garble(value.Name + " - " + value.status);
         }
-        get { return _origin; }
+        get { return origin; }
     }
 
     private void Update()
     {
         transform.localScale = Vector3.Lerp(transform.localScale,
-            Vector3.one * ((Hover ? 3f : 2f) / (Hacked ? 1f : 1.5f)), 0.1f);
+            Vector3.one * ((hover ? 3f : 2f) / (Hacked ? 1f : 1.5f)), 0.1f);
 
-        Hover = false;
-        text.text = Roman(_origin.Level) + " " + (!Hacked
-            ? (CanHack
-                ? "HACK " + Garble(_origin.Name + " - " + _origin.Status)
-                : Garble("HACK " + _origin.Name + " - " + _origin.Status))
-            : _origin.Action + " " + _origin.Name + " - " + _origin.Status);
+        hover = false;
+        text.text = Roman(origin.level) + " " + (!Hacked
+            ? (canHack
+                ? "HACK " + Garble(origin.Name + " - " + origin.status)
+                : Garble("HACK " + origin.Name + " - " + origin.status))
+            : origin.action + " " + origin.Name + " - " + origin.status);
     }
 
     public void Activate(Creds creds)
     {
         if (!Hacked)
         {
-            if (_origin.Level <= creds.Level)
+            if (origin.level <= creds.level)
             {
-                if (Alarm(_origin.transform))
+                if (Alarm(origin.transform))
                 {
                     Hacked = true;
-                    GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>().PlayOneShot(_origin.HackClip,0.2f);
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>().PlayOneShot(origin.hackClip,0.2f);
                 }
                 else
                 {
@@ -68,32 +68,32 @@ public class NetNode : MonoBehaviour
         }
         else
         {
-            _origin.SendMessage("Activate", creds);
+            origin.SendMessage("Activate", creds);
         }
     }
 
     private bool Alarm(Transform t)
     {
-        return Guard._guards.Where(guard => guard != null).All(guard => !(Vector3.Distance(t.position, guard.transform.position) < 5));
+        return Guard.guards.Where(guard => guard != null).All(guard => !(Vector3.Distance(t.position, guard.transform.position) < 5));
     }
 
     private void Alert()
     {
-        if (FindObjectOfType<AstarPath>() == null || Guard._guards == null) return;
+        if (FindObjectOfType<AstarPath>() == null || Guard.guards == null) return;
         var p = GameObject.FindGameObjectWithTag("Player");
-        for (int i = 0; i < Guard._guards.Length; ++i)
+        for (int i = 0; i < Guard.guards.Length; ++i)
         {
-            if (Guard._guards[i] == null) continue;
+            if (Guard.guards[i] == null) continue;
 
-            var g = Guard._guards[i].GetComponent<Guard>();
+            var g = Guard.guards[i].GetComponent<Guard>();
             g.path = null;
             g.targetPosition = p.transform.position;
-            g._awaitingPath = true;
+            g.awaitingPath = true;
             g.seeker.StartPath(g.transform.position, g.targetPosition);
             g.alert = 2;
         }
         p.GetComponent<Player>().Hack = null;
-        p.GetComponent<AudioSource>().PlayOneShot(Guard.AlarmClip);
+        p.GetComponent<AudioSource>().PlayOneShot(Guard.alarmClip);
     }
 
     public static string Garble(string s)

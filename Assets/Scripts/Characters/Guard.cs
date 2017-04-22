@@ -11,43 +11,46 @@ public class Guard : MonoBehaviour
     public float nextWaypointDistance = 3;
     public Vector3 targetPosition;
 
-    public float SlowSpeed;
-    public float NormalSpeed;
-    public float FastSpeed;
-    public float DetectionAngle;
-    public float AlertTime;
-    public float AlertLevel;
-    public AudioClip AlarmSound;
+    public float slowSpeed;
+    public float normalSpeed;
+    public float fastSpeed;
+    public float detectionAngle;
+    public float alertTime;
+    public float alertLevel;
+    public AudioClip alarmSound;
 
-    public bool CanSeePlayer;
+    public bool canSeePlayer;
 
-    private RaycastHit _hit;
+    private RaycastHit hit;
     private Human human;
     internal Seeker seeker;
     internal Path path;
     private int currentWaypoint = 0;
-    public static AudioClip AlarmClip;
-    public static GameObject[] _switches;
-    public static readonly Dictionary<Transform, float> _patrols = new Dictionary<Transform, float>();
-    public static Transform _player;
-    public static Rigidbody _playerr;
-    public static GameObject[] _guards;
-    internal bool _awaitingPath;
+    public static AudioClip alarmClip;
+    public static GameObject[] switches;
+    public static readonly Dictionary<Transform, float> Patrols = new Dictionary<Transform, float>();
+    public static Transform player;
+    public static Rigidbody playerr;
+    public static Guard[] guards;
+    public static Civilian[] civilians;
+    internal bool awaitingPath;
     internal int alert;
 
     private void Start()
     {
-        AlarmClip = AlarmSound;
+        alarmClip = alarmSound;
         human = GetComponent<Human>();
         seeker = GetComponent<Seeker>();
         seeker.pathCallback += OnPathComplete;
-        if (_switches == null)
-            _switches = GameObject.FindGameObjectsWithTag("Switch");
-        if (_guards == null)
-            _guards = GameObject.FindGameObjectsWithTag("Guard");
-        if (_patrols.Count == 0)
+        if (switches == null)
+            switches = GameObject.FindGameObjectsWithTag("Switch");
+        if (guards == null)
+            guards = GameObject.FindGameObjectsWithTag("Guard").Select(g => g.GetComponent<Guard>()).ToArray();;
+        if (civilians == null)
+            civilians = GameObject.FindGameObjectsWithTag("Civilian").Select(g => g.GetComponent<Civilian>()).ToArray();
+        if (Patrols.Count == 0)
             foreach (var go in GameObject.FindGameObjectsWithTag("Patrol"))
-                _patrols.Add(go.transform, 0);
+                Patrols.Add(go.transform, 0);
     }
 
     private void OnDestroy()
@@ -58,47 +61,48 @@ public class Guard : MonoBehaviour
 
     private void Reinforce()
     {
-        if (human.Level < AlertLevel || FindObjectOfType<AstarPath>() == null || _guards == null) return;
-        if(_player!= null)
-            _player.GetComponent<AudioSource>().PlayOneShot(AlarmSound);
-        for (int i = 0; i < _guards.Length; ++i)
+        if (human.level < alertLevel || FindObjectOfType<AstarPath>() == null || guards == null) return;
+        if(player!= null)
+            player.GetComponent<AudioSource>().PlayOneShot(alarmSound);
+        for (int i = 0; i < guards.Length; ++i)
         {
-            if (_guards[i] == null) continue;
+            if (guards[i] == null) continue;
 
-            var g = _guards[i].GetComponent<Guard>();
+            var g = guards[i].GetComponent<Guard>();
             g.path = null;
             g.targetPosition = transform.position;
-            g._awaitingPath = true;
+            g.awaitingPath = true;
             g.seeker.StartPath(g.transform.position, g.targetPosition);
             g.alert = 2;
         }
     }
 
-    private bool Alarming;
+    private bool alarming;
     public void Alarm()
     {
-        if(!Alarming)
+        if(!alarming)
             StartCoroutine(DoAlarm());
     }
 
     IEnumerator DoAlarm()
     {
-        Alarming = true;
-        yield return new WaitForSeconds(AlertTime);
-        Alarming = false;
-        if (!CanSeePlayer) yield break;
+        alarming = true;
+        yield return new WaitForSeconds(alertTime);
+        alarming = false;
+        if (!canSeePlayer) yield break;
 
-        if (FindObjectOfType<AstarPath>() == null || _guards == null) yield break;
-        for (int i = 0; i < _guards.Length; ++i)
-        {
-            if (_guards[i] == null) continue;
-
-            var g = _guards[i].GetComponent<Guard>();
-            g.path = null;
-            g.targetPosition = _player.position;
-            g._awaitingPath = true;
-            g.seeker.StartPath(g.transform.position, g.targetPosition);
-            g.alert = 2;
+        if (FindObjectOfType<AstarPath>() == null || guards == null) yield break;
+        foreach (Guard guard in guards) {
+            if (guard == null) continue;
+            guard.path = null;
+            guard.targetPosition = player.position;
+            guard.awaitingPath = true;
+            guard.seeker.StartPath(guard.transform.position, guard.targetPosition);
+            guard.alert = 2;
+        }
+        foreach (var civilian in civilians) {
+            if (civilian == null) continue;
+            civilian.Alarm();
         }
     }
 
@@ -113,19 +117,19 @@ public class Guard : MonoBehaviour
                 return;
             }
 
-            human.InputControl = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+            human.inputControl = (path.vectorPath[currentWaypoint] - transform.position).normalized;
             if (Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]) < nextWaypointDistance)
                 currentWaypoint++;
         }
-        else if (!_awaitingPath)
+        else if (!awaitingPath)
         {
             var maxt = 0f;
             var max = new List<Transform>();
-            foreach (var patrol in _patrols.Keys.ToArray())
+            foreach (var patrol in Patrols.Keys.ToArray())
             {
-                if (int.Parse(patrol.name.Split('-')[0]) != human.Level) continue;
-                var value = _patrols[patrol];
-                _patrols[patrol] = value + Time.fixedDeltaTime;
+                if (int.Parse(patrol.name.Split('-')[0]) != human.level) continue;
+                var value = Patrols[patrol];
+                Patrols[patrol] = value + Time.fixedDeltaTime;
                 if (maxt < value)
                 {
                     maxt = value;
@@ -134,58 +138,58 @@ public class Guard : MonoBehaviour
                 if (maxt == value)
                 {
                     max.Add(patrol);
-                    _patrols[patrol] = 0;
+                    Patrols[patrol] = 0;
                 }
             }
             if (max.Count > 0)
             {
                 targetPosition = max[Random.Range(0, max.Count)].position;
-                _awaitingPath = true;
+                awaitingPath = true;
                 seeker.StartPath(transform.position, targetPosition);
             }
         }
 
-        if (Physics.Raycast(transform.position, transform.forward, out _hit, 2))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 2))
         {
-            if (_hit.transform.parent != null && _hit.transform.parent.CompareTag("Switch"))
+            if (hit.transform.parent != null && hit.transform.parent.CompareTag("Switch"))
             {
-                if (_hit.transform.parent.GetComponent<Door>() != null)
+                if (hit.transform.parent.GetComponent<Door>() != null)
                 {
-                    _hit.transform.parent.SendMessage("Activate", human.Creds);
+                    hit.transform.parent.SendMessage("Activate", human.Creds);
                 }
-                if (_hit.transform.parent.GetComponent<Guard>() != null)
+                if (hit.transform.parent.GetComponent<Guard>() != null)
                 {
                     Interrupt();
                     //human.InputControl = (transform.right - transform.forward).normalized;
                 }
             }
         }
-        CanSeePlayer = false;
-        var dir = _player != null ? (_player.position - transform.position).normalized : Vector3.zero;
-        if (_player != null && Physics.Raycast(transform.position, dir, out _hit))
+        canSeePlayer = false;
+        var dir = player != null ? (player.position - transform.position).normalized : Vector3.zero;
+        if (player != null && Physics.Raycast(transform.position, dir, out hit))
         {
-            if (_hit.transform == _player && Vector3.Dot(dir, transform.forward) > Mathf.Cos(DetectionAngle * Mathf.Deg2Rad))
+            if (hit.transform == player && Vector3.Dot(dir, transform.forward) > Mathf.Cos(detectionAngle * Mathf.Deg2Rad))
             {
-                CanSeePlayer = true;
-                if (!_awaitingPath && Vector3.Distance(_player.position, targetPosition) > 1)
+                canSeePlayer = true;
+                if (!awaitingPath && Vector3.Distance(player.position, targetPosition) > 1)
                 {
                     path = null;
-                    targetPosition = _player.position;
-                    _awaitingPath = true;
+                    targetPosition = player.position;
+                    awaitingPath = true;
                     seeker.StartPath(transform.position, targetPosition);
                 }
                 transform.rotation = Quaternion.Lerp(transform.rotation,
-                    Quaternion.LookRotation((_player.position + transform.right * 0.25f + _playerr.velocity * 0.2f) - transform.position), 0.5f);
-                human.InputFire = true;
-                human.LockRot = true;
+                    Quaternion.LookRotation((player.position + transform.right * 0.25f + playerr.velocity * 0.2f) - transform.position), 0.5f);
+                human.inputFire = true;
+                human.lockRot = true;
                 if (alert == 0)
                     Alarm();
                 alert = 2;
             }
         }
 
-        human.InputAim = alert > 0;
-        human.Speed = alert == 0 ? NormalSpeed : (alert == 2 ? SlowSpeed : FastSpeed);
+        human.inputAim = alert > 0;
+        human.speed = alert == 0 ? normalSpeed : (alert == 2 ? slowSpeed : fastSpeed);
 
         if (alert == 2)
             alert = 1;
@@ -204,7 +208,7 @@ public class Guard : MonoBehaviour
         }
         path = p;
         currentWaypoint = 0;
-        _awaitingPath = false;
+        awaitingPath = false;
 
         for (var i = 1; i < p.vectorPath.Count; i++) {
             var a = p.vectorPath[i-1];

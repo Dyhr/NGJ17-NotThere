@@ -3,36 +3,36 @@ using System.Collections;
 
 public class Goal : MonoBehaviour
 {
-    public float Speed;
-    public float Speed2;
-    public Transform Player;
-    public AudioClip PickupClip;
+    public float speed;
+    public float speed2;
+    public Transform player;
+    public AudioClip pickupClip;
 
-    private Transform Price;
+    private Transform price;
     private Vector3 target;
     private int i;
 
     private void Start()
     {
-        Price = transform.FindChild("Price");
+        price = transform.FindChild("Price");
         StartCoroutine(Cycle());
     }
 
     private void Update()
     {
-        if (Price == null) return;
-        Price.Rotate(0, Speed*Time.deltaTime, 0);
-        Price.localPosition = Vector3.Lerp(Price.localPosition, target, 0.05f);
+        if (price == null) return;
+        price.Rotate(0, speed*Time.deltaTime, 0);
+        price.localPosition = Vector3.Lerp(price.localPosition, target, 0.05f);
 
-        if (Player != null && Vector3.Distance(transform.position, Player.position) < 1.5f)
+        if (player != null && Vector3.Distance(transform.position, player.position) < 1.5f)
         {
-            Price.parent = Player;
-            Price.localPosition = -Vector3.forward*0.5f;
-            Price.localEulerAngles = new Vector3(90, 0, 0);
-            Price.Rotate(0,45,0,Space.Self);
-            Price = null;
+            price.parent = player;
+            price.localPosition = -Vector3.forward*0.5f;
+            price.localEulerAngles = new Vector3(90, 0, 0);
+            price.Rotate(0,45,0,Space.Self);
+            price = null;
             FindObjectOfType<Teleport>().Finished = true;
-            Player.GetComponent<AudioSource>().PlayOneShot(PickupClip,0.8f);
+            player.GetComponent<AudioSource>().PlayOneShot(pickupClip,0.8f);
 
             Alert();
             var doors = FindObjectsOfType<Door>();
@@ -45,16 +45,16 @@ public class Goal : MonoBehaviour
     }
     private void Alert()
     {
-        if (FindObjectOfType<AstarPath>() == null || Guard._guards == null) return;
-        var p = Player;
-        for (int i = 0; i < Guard._guards.Length; ++i)
+        if (FindObjectOfType<AstarPath>() == null || Guard.guards == null) return;
+        var p = player;
+        for (int i = 0; i < Guard.guards.Length; ++i)
         {
-            if (Guard._guards[i] == null) continue;
+            if (Guard.guards[i] == null) continue;
 
-            var g = Guard._guards[i].GetComponent<Guard>();
+            var g = Guard.guards[i].GetComponent<Guard>();
             g.path = null;
             g.targetPosition = p.transform.position;
-            g._awaitingPath = true;
+            g.awaitingPath = true;
             g.seeker.StartPath(g.transform.position, g.targetPosition);
             g.alert = 2;
         }
@@ -65,7 +65,7 @@ public class Goal : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Speed2);
+            yield return new WaitForSeconds(speed2);
             target = Vector3.up*(++i%2 == 0 ? 0.2f : 1.5f);
         }
     }

@@ -472,14 +472,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextWaypointDistance: 1
   targetPosition: {x: 0, y: 0, z: 0}
-  SlowSpeed: 3
-  NormalSpeed: 5
-  FastSpeed: 6
-  DetectionAngle: 45
-  AlertTime: 2
-  AlertLevel: 1
-  AlarmSound: {fileID: 0}
-  CanSeePlayer: 0
+  slowSpeed: 4
+  normalSpeed: 6
+  fastSpeed: 8
+  detectionAngle: 45
+  alertTime: 4
+  alertLevel: 0
+  alarmSound: {fileID: 8300000, guid: 3edb48b2a533b4abd81845189eb1d444, type: 3}
+  canSeePlayer: 0
 --- !u!114 &11420732
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -553,36 +553,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf29e89cd8ab420590cb8e4cc92bba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Height: 2
-  Speed: 8
-  HP: 10
-  Armor: 10
-  Level: 0
-  AimCurve:
+  height: 2
+  speed: 4
+  hp: 10
+  armor: 10
+  level: 0
+  aimCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  AimTimeMul: 1
-  InputControl: {x: 0, y: 0, z: 0}
-  InputAim: 0
-  InputFire: 0
-  Forward: {x: 0, y: 0, z: 1}
-  Right: {x: 1, y: 0, z: 0}
-  LockRot: 0
+  aimTimeMul: 2
+  inputControl: {x: 0, y: 0, z: 0}
+  inputAim: 0
+  inputFire: 0
+  forward: {x: 0, y: 0, z: 1}
+  right: {x: 1, y: 0, z: 0}
+  lockRot: 0
 --- !u!136 &13654552
 CapsuleCollider:
   m_ObjectHideFlags: 1

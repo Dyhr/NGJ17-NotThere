@@ -6,20 +6,20 @@ using System.Collections;
 public class Networkable : MonoBehaviour
 {
     public string Name;
-    public string Action;
-    public int Level;
-    public string Status;
-    public bool Hacked;
-    public AudioClip ActivateClip;
-    public AudioClip HackClip;
-    public List<Networkable> Neighbors;
+    public string action;
+    public int level;
+    public string status;
+    public bool hacked;
+    public AudioClip activateClip;
+    public AudioClip hackClip;
+    public List<Networkable> neighbors;
 
     private void OnDrawGizmos()
     {
         Fix();
 
         Gizmos.color = Color.cyan;
-        foreach (var networkable in Neighbors)
+        foreach (var networkable in neighbors)
         {
             Gizmos.DrawLine(transform.position + Vector3.up * 2, networkable.transform.position + Vector3.up * 2);
         }
@@ -32,23 +32,23 @@ public class Networkable : MonoBehaviour
 
     private void Fix()
     {
-        foreach (var networkable in Neighbors)
+        foreach (var networkable in neighbors)
         {
-            if (!networkable.Neighbors.Contains(this)) networkable.Neighbors.Add(this);
+            if (!networkable.neighbors.Contains(this)) networkable.neighbors.Add(this);
         }
     }
 }
 
 public class Creds
 {
-    public string Name;
-    public int Level;
-    public Human Owner;
+    public string name;
+    public int level;
+    public Human owner;
 
     public Creds(string name, int level, Human owner)
     {
-        Name = name;
-        Level = level;
-        Owner = owner;
+        this.name = name;
+        this.level = level;
+        this.owner = owner;
     }
 }

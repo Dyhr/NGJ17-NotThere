@@ -310,13 +310,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Terminal
-  Action: Hack
-  Level: 0
-  Status: Not Hacked
-  Hacked: 0
-  ActivateClip: {fileID: 0}
-  HackClip: {fileID: 0}
-  Neighbors: []
+  action: Hack
+  level: 0
+  status: Not Hacked
+  hacked: 0
+  activateClip: {fileID: 8300000, guid: 82c7cf9fe920d4e42b9d6e25ce8e5067, type: 3}
+  hackClip: {fileID: 8300000, guid: f65375613d01a45a39d938ae6088bd74, type: 3}
+  neighbors: []
 --- !u!114 &11445742
 MonoBehaviour:
   m_ObjectHideFlags: 1

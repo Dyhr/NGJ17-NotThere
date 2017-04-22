@@ -6,104 +6,104 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     public Camera Camera;
-    public float ActivateDistance;
+    public float activateDistance;
 
-    public Material NodeMaterial;
-    public Material PlaneMaterial;
-    public Transform NodeLabel;
-    public AudioClip TeleClip;
+    public Material nodeMaterial;
+    public Material planeMaterial;
+    public Transform nodeLabel;
+    public AudioClip teleClip;
 
     private HackMode hacker;
-    private Networkable _hack;
+    private Networkable hack;
     public Networkable Hack
     {
         set
         {
-            _hack = value;
-            if (_hack != null && hacker == null) { 
+            hack = value;
+            if (hack != null && hacker == null) {
                 hacker = new GameObject("Hacker").AddComponent<HackMode>();
-                hacker.NodeMaterial = NodeMaterial;
-                hacker.PlaneMaterial = PlaneMaterial;
-                hacker.NodeLabel = NodeLabel;
+                hacker.nodeMaterial = nodeMaterial;
+                hacker.planeMaterial = planeMaterial;
+                hacker.nodeLabel = nodeLabel;
                 hacker.Origin = value;
             }
-            if(_hack == null && hacker != null)
+            if(hack == null && hacker != null)
                 Destroy(hacker.gameObject);
         }
-        get { return _hack; }
+        get { return hack; }
     }
 
-    private RaycastHit _hit;
-    private Human _human;
-    private GameObject[] _switches;
+    private RaycastHit hit;
+    private Human human;
+    private GameObject[] switches;
 
     private void Start()
     {
-        if (Guard._player == null)
-            Guard._player = GameObject.FindGameObjectWithTag("Player").transform;
-        if (Guard._playerr == null)
-            Guard._playerr = Guard._player.GetComponent<Rigidbody>();
+        if (Guard.player == null)
+            Guard.player = GameObject.FindGameObjectWithTag("Player").transform;
+        if (Guard.playerr == null)
+            Guard.playerr = Guard.player.GetComponent<Rigidbody>();
 
         if (Camera == null) Camera = Camera.main;
-        _human = GetComponent<Human>();
-        _human.IdleLook = () =>
+        human = GetComponent<Human>();
+        human.idleLook = () =>
         {
             if (Hack == null)
             {
-                if (Physics.Raycast(Camera.ScreenPointToRay(Input.mousePosition), out _hit))
+                if (Physics.Raycast(Camera.ScreenPointToRay(Input.mousePosition), out hit))
                 {
-                    var m = _hit.point + transform.right * 0.25f;
+                    var m = hit.point + transform.right * 0.25f;
                     m.y = transform.position.y;
                     transform.LookAt(m); // TODO lerp
                 }
             }
         };
-        _human.Forward = Camera.transform.forward;
-        _human.Forward.y = 0;
-        _human.Right = Camera.transform.right;
-        _human.Right.y = 0;
-        _switches = GameObject.FindGameObjectsWithTag("Switch");
+        human.forward = Camera.transform.forward;
+        human.forward.y = 0;
+        human.right = Camera.transform.right;
+        human.right.y = 0;
+        switches = GameObject.FindGameObjectsWithTag("Switch");
 
-        GetComponent<AudioSource>().PlayOneShot(TeleClip, 0.8f);
+        GetComponent<AudioSource>().PlayOneShot(teleClip, 0.8f);
     }
 
     private void Update()
     {
         if (Hack == null)
         {
-            _human.InputControl = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-            _human.InputFire = Input.GetButtonDown("Fire1") && Input.GetButton("Fire2");
-            _human.InputAim = Input.GetButton("Fire2");
+            human.inputControl = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+            human.inputFire = Input.GetButtonDown("Fire1") && Input.GetButton("Fire2");
+            human.inputAim = Input.GetButton("Fire2");
 
             Camera.transform.position = transform.position - Camera.transform.forward*40;
-            if (Input.GetAxisRaw("Fire2") > 0) _human.IdleLook();
+            if (Input.GetAxisRaw("Fire2") > 0) human.idleLook();
 
             Cursor.lockState = CursorLockMode.None;
         }
         else
         {
-            Camera.transform.position += _human.Right*Input.GetAxisRaw("Mouse X") +
-                                         _human.Forward*Input.GetAxisRaw("Mouse Y");
+            Camera.transform.position += human.right*Input.GetAxisRaw("Mouse X") +
+                                         human.forward*Input.GetAxisRaw("Mouse Y");
 
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        if (Label.INSTANCE != null)
-            Label.INSTANCE.Target = null;
-        var s = _switches.OrderBy(h => Vector3.Distance(transform.position, h.transform.position)).FirstOrDefault();
-        if (s != null && Vector3.Distance(transform.position, s.transform.position) <= ActivateDistance)
+        if (Label.instance != null)
+            Label.instance.Target = null;
+        var s = switches.OrderBy(h => Vector3.Distance(transform.position, h.transform.position)).FirstOrDefault();
+        if (s != null && Vector3.Distance(transform.position, s.transform.position) <= activateDistance)
         {
             var item = s.GetComponent<Networkable>();
             if (item != null)
             {
-                if (Label.INSTANCE != null && Hack == null)
+                if (Label.instance != null && Hack == null)
                 {
-                    Label.INSTANCE.Target = s.transform;
-                    Label.INSTANCE.Text.text = item.Name + "\nLevel " + NetNode.Roman(item.Level) + "\n" + item.Action;
+                    Label.instance.Target = s.transform;
+                    Label.instance.text.text = item.Name + "\nLevel " + NetNode.Roman(item.level) + "\n" + item.action;
                 }
                 if (Input.GetButtonDown("Action"))
                 {
-                    s.transform.SendMessage("Activate", _human.Creds);
+                    s.transform.SendMessage("Activate", human.Creds);
                 }
             }
         }
@@ -111,9 +111,9 @@ public class Player : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Label.INSTANCE != null)
-            Label.INSTANCE.Target = null;
+        if (Label.instance != null)
+            Label.instance.Target = null;
         Hack = null;
-        Destroy(FindObjectOfType<HUD>());
+        Destroy(FindObjectOfType<Hud>());
     }
 }

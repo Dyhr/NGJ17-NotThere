@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour
             var human = hit.transform.GetComponent<Human>();
             if (human != null)
             {
-                human.HP -= Mathf.Max(Damage - Mathf.Max(human.Armor - Piercing, 0), 0);
+                human.hp -= Mathf.Max(Damage - Mathf.Max(human.armor - Piercing, 0), 0);
                 var g = hit.transform.GetComponent<Guard>();
                 if (g)
                 {
@@ -52,7 +52,7 @@ public class Bullet : MonoBehaviour
 
                     g.path = null;
                     g.targetPosition = player.transform.position;
-                    g._awaitingPath = true;
+                    g.awaitingPath = true;
                     g.seeker.StartPath(g.transform.position, g.targetPosition);
                     g.alert = 1;
                 }

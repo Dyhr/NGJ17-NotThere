@@ -490,10 +490,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa55e8108530840b49a37a65673e2bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 2
-  Speed2: 2
-  Player: {fileID: 0}
-  PickupClip: {fileID: 0}
+  speed: 2
+  speed2: 4
+  player: {fileID: 0}
+  pickupClip: {fileID: 8300000, guid: 43239902776fc4f218514ab515da8e49, type: 3}
 --- !u!136 &13684984
 CapsuleCollider:
   m_ObjectHideFlags: 1

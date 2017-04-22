@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class Label : MonoBehaviour
 {
-    public static Label INSTANCE;
-    public Text Text;
+    public static Label instance;
+    public Text text;
 
     public Transform Target
     {
@@ -19,8 +19,8 @@ public class Label : MonoBehaviour
 
     private void Start()
     {
-        INSTANCE = this;
+        instance = this;
         transform.rotation = Camera.main.transform.rotation;
-        Text = GetComponentInChildren<Text>();
+        text = GetComponentInChildren<Text>();
     }
 }

@@ -382,7 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level: 0
   Player: {fileID: 0}
-  PickupClip: {fileID: 0}
+  PickupClip: {fileID: 8300000, guid: 43239902776fc4f218514ab515da8e49, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -5,27 +5,27 @@ using System.Collections;
 public class ProgressTracker : MonoBehaviour
 {
 
-    public static ProgressTracker INSTANCE;
+    public static ProgressTracker instance;
 
-    public int Level = 0;
-    public static int[] Seeds;
+    public int level = 0;
+    public static int[] seeds;
 
     private void Start()
     {
-        if (INSTANCE != null)
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
         }
-        INSTANCE = this;
+        instance = this;
         DontDestroyOnLoad(gameObject);
         StartCoroutine(StatusCheck());
 
         var now = System.DateTime.Now;
         Random.seed = now.Millisecond * now.Minute + now.Second * now.Hour;
 
-        if(Seeds == null)
-            Seeds = new[]
+        if(seeds == null)
+            seeds = new[]
             {
                 Random.Range(int.MinValue, int.MaxValue),
                 Random.Range(int.MinValue, int.MaxValue),
@@ -43,9 +43,9 @@ public class ProgressTracker : MonoBehaviour
     IEnumerator NextLevel()
     {
         yield return new WaitForSeconds(1.5f);
-        Level++;
-        FindObjectOfType<Level>().Rooms += 6;
-        if (Level < Seeds.Length)
+        level++;
+        FindObjectOfType<Level>().rooms += 6;
+        if (level < seeds.Length)
             Rebuild();
         else
             Winner();
@@ -58,9 +58,9 @@ public class ProgressTracker : MonoBehaviour
 
     private void Rebuild()
     {
-        if (Seeds.Length < Level) return;
+        if (seeds.Length < level) return;
         SoftReset();
-        Random.seed = Seeds[Level];
+        Random.seed = seeds[level];
         FindObjectOfType<Level>().Remake();
         FindObjectOfType<AstarPath>().Scan();
         foreach (var guard in FindObjectsOfType<Guard>())
@@ -84,16 +84,16 @@ public class ProgressTracker : MonoBehaviour
     private void HardReset()
     {
         SoftReset();
-        Label.INSTANCE = null;
+        Label.instance = null;
         Application.LoadLevel(0);
     }
     private void SoftReset()
     {
-        Guard._switches = null;
-        Guard._player = null;
-        Guard._playerr = null;
-        Guard._guards = null;
-        Guard._patrols.Clear();
+        Guard.switches = null;
+        Guard.player = null;
+        Guard.playerr = null;
+        Guard.guards = null;
+        Guard.Patrols.Clear();
     }
 
     IEnumerator StatusCheck()
