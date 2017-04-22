@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
 
     public bool invisible;
 
+    public int roomLevel;
+
     private Color initialColor;
     private HackMode hacker;
     private Networkable hack;

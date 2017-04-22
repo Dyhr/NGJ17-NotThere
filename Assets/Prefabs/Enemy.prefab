@@ -476,7 +476,7 @@ MonoBehaviour:
   normalSpeed: 2
   fastSpeed: 4
   detectionAngle: 45
-  alertTime: 1.5
+  alertTime: 1
   alertLevel: 0
   alarmSound: {fileID: 8300000, guid: 3edb48b2a533b4abd81845189eb1d444, type: 3}
   canSeePlayer: 0

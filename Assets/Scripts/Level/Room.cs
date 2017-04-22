@@ -71,6 +71,14 @@ public class Room : MonoBehaviour {
 	    lamp.intensity = 8;
 	    lamp.renderMode = LightRenderMode.ForcePixel;
 	    lamp.type = LightType.Spot;
+	    lamp.color = level == 0 ? settings.goodColor : settings.badColor;
+
+
+	    var trigger = gameObject.AddComponent<BoxCollider>();
+	    trigger.isTrigger = true;
+	    trigger.size = new Vector3(size.x, settings.wallHeight, size.y);
+	    trigger.center = Vector3.up * settings.wallHeight/2;
+
 
 	    var wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
@@ -153,7 +161,7 @@ public class Room : MonoBehaviour {
 
 	    var lev = Mathf.Max(level - (Random.value < 0.4 ? 1 : 0), 0);
 	    for (int i = 0; i < 4; ++i) {
-	        if (neighbors[i] == null || level <= 1) continue;
+	        if (neighbors[i] == null) continue;
 
 	        var p = Vector3.zero;
 	        switch (i) {
@@ -290,6 +298,11 @@ public class Room : MonoBehaviour {
         }
         result = mroom;
         return Mathf.Max(max, i);
+    }
+
+    public void OnTriggerEnter(Collider other) {
+        if (other.tag == "Player")
+            other.GetComponent<Player>().roomLevel = level;
     }
 
     public static Room Create(Vector2 position, Vector2 size){

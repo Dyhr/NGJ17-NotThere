@@ -177,12 +177,11 @@ public class Level : MonoBehaviour {
                 room.neighbors[i] = null;
 
                 if (room.level == 0) {
-                    room.Spawn(roomSettings.guard.transform, 1);
                     room.Spawn(roomSettings.civilian.transform, 0, 10);
                 }
 
                 var e = room.Furthest();
-                e.spawns.Add(roomSettings.terminal.transform, lev + Random.Range(0, 2));
+                e.Spawn(roomSettings.terminal.transform, lev + Random.Range(0, 2));
                 if (Random.value < 0.4f * lev)
                     room.Spawn(roomSettings.guard.transform, lev);
                 if (Random.value < 0.6f)
@@ -198,7 +197,16 @@ public class Level : MonoBehaviour {
 
         foreach (Room room in map)
             if (room.level == 0)
-                room.level = room.neighbors.First(r => r != null).level;
+                room.level = room.neighbors.First(r => r != null && r.level > 0).level;
+        foreach (Room room in map)
+            if (room.level == 0)
+                room.level = room.neighbors.First(r => r != null && r.level > 0).level;
+        foreach (Room room in map)
+            if (room.level == 0)
+                room.level = room.neighbors.First(r => r != null && r.level > 0).level;
+
+        foreach (var room in path.Take(path.Count/2))
+            room.level = 0;
 
         return map;
     }
@@ -292,5 +300,7 @@ public class Level : MonoBehaviour {
         public Transform spawn;
         public Transform goal;
         public Transform cabinet;
+
+        public Color goodColor, badColor;
     }
 }
