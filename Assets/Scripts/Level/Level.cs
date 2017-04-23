@@ -205,7 +205,7 @@ public class Level : MonoBehaviour {
             if (room.level == 0)
                 room.level = room.neighbors.First(r => r != null && r.level > 0).level;
 
-        foreach (var room in path.Take(path.Count/2))
+        foreach (var room in path.Take(Mathf.CeilToInt(path.Count/2f)))
             room.level = 0;
 
         return map;
@@ -329,6 +329,7 @@ public class Level : MonoBehaviour {
         public float lampHeight = 4;
         public Material wallMaterial;
         public Material floorMaterial;
+        public Material coverMaterial;
         public Door door;
         public Guard guard;
         public Civilian civilian;

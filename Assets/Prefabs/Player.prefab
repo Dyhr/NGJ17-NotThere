@@ -275,7 +275,7 @@ MonoBehaviour:
   height: 2
   speed: 5
   hp: 10
-  armor: 10
+  armor: 5
   level: 0
   aimCurve:
     serializedVersion: 2

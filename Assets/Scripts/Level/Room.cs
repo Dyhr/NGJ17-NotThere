@@ -27,6 +27,7 @@ public class Room : MonoBehaviour {
 	    transform.position = new Vector3(position.x, 0, position.y);
 	    transform.tag = "Merge";
 
+	    Transform wall, cover;
 	    var floor = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    floor.parent = transform;
 	    floor.localScale = new Vector3(size.x, 0.1f, size.y);
@@ -34,6 +35,18 @@ public class Room : MonoBehaviour {
 	    floor.localRotation = Quaternion.identity;
 	    floor.GetComponent<MeshRenderer>().sharedMaterial = settings.floorMaterial;
 	    floor.gameObject.layer = LayerMask.NameToLayer("Ground");
+	    cover = GameObject.CreatePrimitive(PrimitiveType.Plane).transform;
+	    cover.parent = floor;
+	    cover.localScale = Vector3.one * 0.1f;
+	    cover.localPosition = - Vector3.right * 0.5001f;
+	    cover.localRotation = Quaternion.LookRotation(Vector3.forward, Vector3.left);
+	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
+	    cover = GameObject.CreatePrimitive(PrimitiveType.Plane).transform;
+	    cover.parent = floor;
+	    cover.localScale = Vector3.one * 0.1f;
+	    cover.localPosition = - Vector3.forward * 0.5001f;
+	    cover.localRotation = Quaternion.LookRotation(Vector3.up, Vector3.back);
+	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
 
 	    var patrol = new GameObject(level + "-Patrol").transform;
 	    patrol.parent = transform;
@@ -81,7 +94,7 @@ public class Room : MonoBehaviour {
 	    trigger.center = Vector3.up * settings.wallHeight/2;
 
 
-	    var wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
+	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(settings.wallThickness, settings.wallHeight,
 	        size.y * (1 - doorPos[0]) - (doorPos[0] != 0 ? settings.doorWidth / 2 : 0));
@@ -90,6 +103,12 @@ public class Room : MonoBehaviour {
 	    wall.localRotation = Quaternion.identity;
 	    wall.GetComponent<MeshRenderer>().sharedMaterial = settings.wallMaterial;
 	    wall.gameObject.layer = LayerMask.NameToLayer("Obstacles");
+	    cover = GameObject.CreatePrimitive(PrimitiveType.Plane).transform;
+	    cover.parent = wall;
+	    cover.localScale = Vector3.one * 0.1f;
+	    cover.localPosition = - Vector3.right * 0.51f;
+	    cover.localRotation = Quaternion.LookRotation(Vector3.forward, Vector3.left);
+	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(settings.wallThickness, settings.wallHeight,
@@ -109,6 +128,12 @@ public class Room : MonoBehaviour {
 	    wall.localRotation = Quaternion.identity;
 	    wall.GetComponent<MeshRenderer>().sharedMaterial = settings.wallMaterial;
 	    wall.gameObject.layer = LayerMask.NameToLayer("Obstacles");
+	    cover = GameObject.CreatePrimitive(PrimitiveType.Plane).transform;
+	    cover.parent = wall;
+	    cover.localScale = Vector3.one * 0.1f;
+	    cover.localPosition = - Vector3.right * 0.51f;
+	    cover.localRotation = Quaternion.LookRotation(Vector3.forward, Vector3.left);
+	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(settings.wallThickness, settings.wallHeight,
@@ -128,6 +153,12 @@ public class Room : MonoBehaviour {
 	        settings.wallHeight / 2, -size.y / 2 + settings.wallThickness / 2);
 	    wall.localRotation = Quaternion.identity;
 	    wall.GetComponent<MeshRenderer>().sharedMaterial = settings.wallMaterial;
+	    cover = GameObject.CreatePrimitive(PrimitiveType.Plane).transform;
+	    cover.parent = wall;
+	    cover.localScale = Vector3.one * 0.1f;
+	    cover.localPosition = - Vector3.forward * 0.51f;
+	    cover.localRotation = Quaternion.LookRotation(Vector3.up, Vector3.back);
+	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
 	    wall.gameObject.layer = LayerMask.NameToLayer("Obstacles");
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
@@ -149,6 +180,12 @@ public class Room : MonoBehaviour {
 	    wall.localRotation = Quaternion.identity;
 	    wall.GetComponent<MeshRenderer>().sharedMaterial = settings.wallMaterial;
 	    wall.gameObject.layer = LayerMask.NameToLayer("Obstacles");
+	    cover = GameObject.CreatePrimitive(PrimitiveType.Plane).transform;
+	    cover.parent = wall;
+	    cover.localScale = Vector3.one * 0.1f;
+	    cover.localPosition = - Vector3.forward * 0.51f;
+	    cover.localRotation = Quaternion.LookRotation(Vector3.up, Vector3.back);
+	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(size.x * doorPos[3] - (doorPos[3] != 0 ? settings.doorWidth / 2 : 0),
