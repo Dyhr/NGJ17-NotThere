@@ -72,6 +72,7 @@ public class Room : MonoBehaviour {
 	    lamp.renderMode = LightRenderMode.ForcePixel;
 	    lamp.type = LightType.Spot;
 	    lamp.color = level == 0 ? settings.goodColor : settings.badColor;
+	    lamp.cullingMask = ~(1 << LayerMask.NameToLayer("Cover"));
 
 
 	    var trigger = gameObject.AddComponent<BoxCollider>();

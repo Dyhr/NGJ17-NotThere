@@ -39,7 +39,9 @@ public class NetNode : MonoBehaviour
     private void Update()
     {
         transform.localScale = Vector3.Lerp(transform.localScale,
-            Vector3.one * ((hover ? 3f : 2f) / (Hacked ? 1f : 1.5f)), 0.1f);
+            Vector3.one * ((hover ? 3f : 2f) / (Hacked ? 1f : canHack ? 1.5f : 2.5f)), 0.1f);
+
+        canvas.gameObject.SetActive(hover);
 
         hover = false;
         text.text = Roman(origin.level) + " " + (!Hacked

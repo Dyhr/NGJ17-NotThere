@@ -67,6 +67,7 @@ public class HackMode : MonoBehaviour
         plane.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
         plane.GetComponent<MeshRenderer>().receiveShadows = false;
         plane.GetComponent<MeshRenderer>().sharedMaterial = planeMaterial;
+        plane.gameObject.layer = LayerMask.NameToLayer("Cover");
     }
 
     private void MakeLine(Networkable a, Networkable b)
@@ -75,7 +76,7 @@ public class HackMode : MonoBehaviour
 
         var line = new GameObject("Line").AddComponent<LineRenderer>();
         line.transform.parent = transform;
-        line.SetWidth(0.4f, 0.4f);
+        line.SetWidth(0.2f, 0.2f);
         line.SetPosition(0, a.transform.position + dir * 7);
         line.SetPosition(1, b.transform.position + dir * 7);
         line.sharedMaterial = nodeMaterial;
