@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Terminal
-  action: Hack
+  action: Fake Alarm
   level: 0
   status: Not Hacked
   hacked: 0

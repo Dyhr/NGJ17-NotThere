@@ -41,12 +41,16 @@ public class Room : MonoBehaviour {
 	    cover.localPosition = - Vector3.right * 0.5001f;
 	    cover.localRotation = Quaternion.LookRotation(Vector3.forward, Vector3.left);
 	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
+	    Destroy(cover.GetComponent<Collider>());
+	    cover.gameObject.layer = LayerMask.NameToLayer("UI");
 	    cover = GameObject.CreatePrimitive(PrimitiveType.Plane).transform;
 	    cover.parent = floor;
 	    cover.localScale = Vector3.one * 0.1f;
 	    cover.localPosition = - Vector3.forward * 0.5001f;
 	    cover.localRotation = Quaternion.LookRotation(Vector3.up, Vector3.back);
 	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
+	    Destroy(cover.GetComponent<Collider>());
+	    cover.gameObject.layer = LayerMask.NameToLayer("UI");
 
 	    var patrol = new GameObject(level + "-Patrol").transform;
 	    patrol.parent = transform;
@@ -60,11 +64,11 @@ public class Room : MonoBehaviour {
 	        for (int i = 0; i < n; i++) {
 	            var spawn = Instantiate(t);
 	            spawn.transform.position = transform.position + new Vector3(
-	                                           Random.Range(-size.x / 2 + settings.wallThickness * 2,
-	                                               size.x / 2 - settings.wallThickness * 2),
+	                                           Random.Range(-size.x / 2 + settings.wallThickness * 6,
+	                                               size.x / 2 - settings.wallThickness * 6),
 	                                           0.5f,
-	                                           Random.Range(-size.y / 2 + settings.wallThickness * 2,
-	                                               size.y / 2 - settings.wallThickness * 2));
+	                                           Random.Range(-size.y / 2 + settings.wallThickness * 6,
+	                                               size.y / 2 - settings.wallThickness * 6));
 	            spawn.parent = transform;
 	            var human = spawn.GetComponent<Human>();
 	            var net = spawn.GetComponent<Networkable>();
@@ -109,6 +113,8 @@ public class Room : MonoBehaviour {
 	    cover.localPosition = - Vector3.right * 0.51f;
 	    cover.localRotation = Quaternion.LookRotation(Vector3.forward, Vector3.left);
 	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
+	    cover.gameObject.layer = LayerMask.NameToLayer("UI");
+	    Destroy(cover.GetComponent<Collider>());
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(settings.wallThickness, settings.wallHeight,
@@ -134,6 +140,8 @@ public class Room : MonoBehaviour {
 	    cover.localPosition = - Vector3.right * 0.51f;
 	    cover.localRotation = Quaternion.LookRotation(Vector3.forward, Vector3.left);
 	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
+	    cover.gameObject.layer = LayerMask.NameToLayer("UI");
+	    Destroy(cover.GetComponent<Collider>());
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(settings.wallThickness, settings.wallHeight,
@@ -159,6 +167,8 @@ public class Room : MonoBehaviour {
 	    cover.localPosition = - Vector3.forward * 0.51f;
 	    cover.localRotation = Quaternion.LookRotation(Vector3.up, Vector3.back);
 	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
+	    cover.gameObject.layer = LayerMask.NameToLayer("UI");
+	    Destroy(cover.GetComponent<Collider>());
 	    wall.gameObject.layer = LayerMask.NameToLayer("Obstacles");
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
@@ -186,6 +196,8 @@ public class Room : MonoBehaviour {
 	    cover.localPosition = - Vector3.forward * 0.51f;
 	    cover.localRotation = Quaternion.LookRotation(Vector3.up, Vector3.back);
 	    cover.GetComponent<MeshRenderer>().sharedMaterial = settings.coverMaterial;
+	    cover.gameObject.layer = LayerMask.NameToLayer("UI");
+	    Destroy(cover.GetComponent<Collider>());
 	    wall = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
 	    wall.parent = transform;
 	    wall.localScale = new Vector3(size.x * doorPos[3] - (doorPos[3] != 0 ? settings.doorWidth / 2 : 0),

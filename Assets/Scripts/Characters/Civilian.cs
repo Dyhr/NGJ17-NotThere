@@ -19,7 +19,6 @@ public class Civilian : MonoBehaviour {
     internal Seeker seeker;
     internal Path path;
     private int currentWaypoint = 0;
-    public static readonly Dictionary<Transform, float> Patrols = new Dictionary<Transform, float>();
     private Transform patrol;
     internal bool awaitingPath;
     public bool leaving;
@@ -29,9 +28,6 @@ public class Civilian : MonoBehaviour {
         human = GetComponent<Human>();
         seeker = GetComponent<Seeker>();
         seeker.pathCallback += OnPathComplete;
-        if (Patrols.Count == 0)
-            foreach (var go in GameObject.FindGameObjectsWithTag("Patrol"))
-                Patrols.Add(go.transform, 0);
     }
 
     private bool alarming;
@@ -71,11 +67,11 @@ public class Civilian : MonoBehaviour {
         {
             var maxt = 0f;
             var max = new List<Transform>();
-            foreach (var patrol in Patrols.Keys.ToArray())
+            foreach (var patrol in Guard.Patrols.Keys.ToArray())
             {
                 if (int.Parse(patrol.name.Split('-')[0]) != human.level) continue;
-                var value = Patrols[patrol];
-                Patrols[patrol] = value + Time.fixedDeltaTime;
+                var value = Guard.Patrols[patrol];
+                Guard.Patrols[patrol] = value + Time.fixedDeltaTime;
                 if (maxt < value)
                 {
                     maxt = value;
@@ -84,7 +80,7 @@ public class Civilian : MonoBehaviour {
                 if (maxt == value)
                 {
                     max.Add(patrol);
-                    Patrols[patrol] = 0;
+                    Guard.Patrols[patrol] = 0;
                 }
             }
             if (max.Count > 0)

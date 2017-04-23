@@ -224,8 +224,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smoothType: 0
   subdivisions: 2
-  iterations: 4
-  strength: 0.05
+  iterations: 5
+  strength: 0.04
   uniformLength: 1
   maxSegmentLength: 0.5
   bezierTangentLength: 0.1
@@ -246,6 +246,7 @@ MonoBehaviour:
   targetPosition: {x: 0, y: 0, z: 0}
   slowSpeed: 4
   fastSpeed: 6
+  leaving: 0
 --- !u!114 &114344767676177700
 MonoBehaviour:
   m_ObjectHideFlags: 1

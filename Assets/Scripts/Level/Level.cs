@@ -177,11 +177,13 @@ public class Level : MonoBehaviour {
                 room.neighbors[i] = null;
 
                 if (room.level == 0) {
-                    room.Spawn(roomSettings.civilian.transform, 5, 5);
+                    room.Spawn(roomSettings.civilian.transform, lev, 4);
                 }
 
                 var e = room.Furthest();
                 e.Spawn(roomSettings.terminal.transform, lev + Random.Range(0, 2));
+                if (Random.value < 0.4f * lev)
+                    room.Spawn(roomSettings.guard.transform, lev);
                 if (Random.value < 0.4f * lev)
                     room.Spawn(roomSettings.guard.transform, lev);
                 if (Random.value < 0.6f)

@@ -65,6 +65,8 @@ public class ProgressTracker : MonoBehaviour
         FindObjectOfType<AstarPath>().Scan();
         foreach (var guard in FindObjectsOfType<Guard>())
             guard.Interrupt();
+        foreach (var civ in FindObjectsOfType<Civilian>())
+            civ.Interrupt();
     }
     private void Update()
     {
@@ -98,9 +100,15 @@ public class ProgressTracker : MonoBehaviour
 
     IEnumerator StatusCheck()
     {
+        yield return new WaitForSeconds(5);
         while (true)
         {
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(1/2f);
+            if (GameObject.FindWithTag("Player") == null) {
+                yield return new WaitForSeconds(3);
+                HardReset();
+                yield return new WaitForSeconds(5);
+            }
             // TODO show death screen
         }
     }

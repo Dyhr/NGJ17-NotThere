@@ -232,7 +232,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -275,7 +275,7 @@ MonoBehaviour:
   height: 2
   speed: 5
   hp: 10
-  armor: 5
+  armor: 8
   level: 0
   aimCurve:
     serializedVersion: 2
