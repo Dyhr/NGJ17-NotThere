@@ -19,6 +19,7 @@ public class Guard : MonoBehaviour {
     public AudioClip alarmSound;
 
     public bool canSeePlayer;
+    public bool alwaysAlert;
 
     private RaycastHit hit;
     private Human human;
@@ -147,34 +148,38 @@ public class Guard : MonoBehaviour {
             }
         }
 
+        canSeePlayer = false;
         if (player != null) {
             if (canSeePlayer) player.GetComponent<Player>().invisible = false;
             if (Vector3.Distance(player.position, transform.position) < 2)
                 player.GetComponent<Player>().invisible = false;
-        }
 
-        canSeePlayer = false;
-        var dir = player != null ? (player.position - transform.position).normalized : Vector3.zero;
-        if (player != null && player.GetComponent<Player>().roomLevel > 0 && Physics.Raycast(transform.position, dir, out hit)) {
-            if (hit.transform == player && !player.GetComponent<Player>().invisible &&
-                Vector3.Dot(dir, transform.forward) > Mathf.Cos(detectionAngle * Mathf.Deg2Rad)) {
-                canSeePlayer = true;
-                if (!awaitingPath && Vector3.Distance(player.position, targetPosition) > 1) {
-                    path = null;
-                    targetPosition = player.position;
-                    awaitingPath = true;
-                    seeker.StartPath(transform.position, targetPosition);
+            var p = player.GetComponent<Player>();
+            var legit = (p.roomLevel == 0 && p.Hack == null && alert == 0) || p.invisible;
+            var dir = player != null ? (player.position - transform.position).normalized : Vector3.zero;
+            if (!legit && Physics.Raycast(transform.position, dir, out hit)) {
+                if (hit.transform == player &&
+                    Vector3.Dot(dir, transform.forward) > Mathf.Cos(detectionAngle * Mathf.Deg2Rad)) {
+                    canSeePlayer = true;
+                    if (!awaitingPath && Vector3.Distance(player.position, targetPosition) > 1) {
+                        path = null;
+                        targetPosition = player.position;
+                        awaitingPath = true;
+                        seeker.StartPath(transform.position, targetPosition);
+                    }
+                    transform.rotation = Quaternion.Lerp(transform.rotation,
+                        Quaternion.LookRotation((player.position + transform.right * 0.25f + playerr.velocity * 0.2f) -
+                                                transform.position), 0.5f);
+                    human.inputFire = true;
+                    human.lockRot = true;
+                    if (alert == 0)
+                        Alarm();
+                    alert = 2;
                 }
-                transform.rotation = Quaternion.Lerp(transform.rotation,
-                    Quaternion.LookRotation((player.position + transform.right * 0.25f + playerr.velocity * 0.2f) -
-                                            transform.position), 0.5f);
-                human.inputFire = true;
-                human.lockRot = true;
-                if (alert == 0)
-                    Alarm();
-                alert = 2;
             }
         }
+
+        if (alwaysAlert && alert == 0) alert = 2;
 
         human.inputAim = alert > 0;
         human.speed = alert == 0 ? normalSpeed : (alert == 2 ? slowSpeed : fastSpeed);

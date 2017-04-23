@@ -57,6 +57,7 @@ public class Goal : MonoBehaviour
             g.awaitingPath = true;
             g.seeker.StartPath(g.transform.position, g.targetPosition);
             g.alert = 2;
+            g.alwaysAlert = true;
         }
         p.GetComponent<Player>().Hack = null;
     }

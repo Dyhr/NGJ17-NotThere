@@ -177,7 +177,7 @@ public class Level : MonoBehaviour {
                 room.neighbors[i] = null;
 
                 if (room.level == 0) {
-                    room.Spawn(roomSettings.civilian.transform, 0, 10);
+                    room.Spawn(roomSettings.civilian.transform, 5, 5);
                 }
 
                 var e = room.Furthest();
@@ -240,7 +240,57 @@ public class Level : MonoBehaviour {
         }
 
         var network = FindObjectsOfType<Networkable>();
-        for (int i = 0; i < maxLevel; ++i) {
+        var terminals = network.Where(n => n.GetComponent<Terminal>()).ToArray();
+        var cabinets = network.Where(n => n.GetComponent<Cabinet>()).ToArray();
+
+        // Connect all terminals
+        foreach (var terminal in terminals) {
+            var eligable = terminals.Where(t => t.level < terminal.level).ToArray();
+            if (eligable.Length == 0) continue;
+            var other = eligable[Random.Range(0, eligable.Length)];
+            other.neighbors.Add(terminal);
+            terminal.neighbors.Add(other);
+        }
+        foreach (var terminal in terminals.Where(t => t.neighbors.Count == 0)) {
+            var eligable = terminals.Where(t => t.neighbors.Count == 0 && t != terminal).ToArray();
+            if (eligable.Length == 0) continue;
+            var other = eligable[Random.Range(0, eligable.Length)];
+            other.neighbors.Add(terminal);
+            terminal.neighbors.Add(other);
+        }
+        foreach (var terminal in terminals.Where(t => t.neighbors.Count == 0)) {
+            var eligable = terminals.Where(t => t != terminal).ToArray();
+            if (eligable.Length == 0) continue;
+            var other = eligable[Random.Range(0, eligable.Length)];
+            other.neighbors.Add(terminal);
+            terminal.neighbors.Add(other);
+        }
+
+
+        // Make sure cabinets are connected to a terminal
+        foreach (var cabinet in cabinets) {
+            var others = terminals.Where(t => t.level >= cabinet.level).ToArray();
+            if (others.Length == 0) continue;
+            var other = others[Random.Range(0, others.Length)];
+
+            cabinet.neighbors.Add(other);
+            other.neighbors.Add(cabinet);
+        }
+
+        // Connect the rest of the stuff
+        foreach (var thing in network.Where(t => t.neighbors.Count == 0)) {
+            var others = network.Where(t => t != thing && !t.neighbors.Contains(thing)).ToArray();
+            var minDist = others.Min(t => Vector3.Distance(thing.transform.position, t.transform.position));
+            var result = others.First(t => Vector3.Distance(thing.transform.position, t.transform.position) ==
+                                                minDist);
+
+            thing.neighbors.Add(result);
+            result.neighbors.Add(thing);
+        }
+
+
+
+        /*for (int i = 0; i < maxLevel; ++i) {
             var nodes = network.Where(n => n.level == i).ToArray();
 
             for (int l = 0; l < nodes.Length; ++l) {
@@ -253,20 +303,6 @@ public class Level : MonoBehaviour {
                 nodes[j].neighbors.Add(nodes[l]);
             }
         }
-        var cabinets = FindObjectsOfType<Cabinet>();
-        for (int i = 0; i < cabinets.Length; ++i) {
-            nLog.Clear();
-            var n = cabinets[i].GetComponent<Networkable>();
-            var l = 0;
-            while (!HasTerminal(n, n.level) && l++ < 5) {
-                var j = 0;
-                do {
-                    j = Random.Range(0, network.Length);
-                } while (j == i && n.neighbors.Contains(network[j]));
-                n.neighbors.Add(network[j]);
-                network[j].neighbors.Add(n);
-            }
-        }
 
         for (int i = 0; i < network.Length; ++i) {
             if (network[i].neighbors.Count > 0) continue;
@@ -276,7 +312,7 @@ public class Level : MonoBehaviour {
             } while (j == i && network[i].neighbors.Contains(network[j]));
             network[i].neighbors.Add(network[j]);
             network[j].neighbors.Add(network[i]);
-        }
+        }*/
 
         aStar.Scan();
         //var merger = new GameObject("Merger").AddComponent<MergeMesh>();

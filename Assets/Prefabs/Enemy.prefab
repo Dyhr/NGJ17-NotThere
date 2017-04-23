@@ -450,7 +450,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -470,11 +470,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b35483e7fb43d472fb0e4bacfa4e021b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextWaypointDistance: 1
+  nextWaypointDistance: 0.8
   targetPosition: {x: 0, y: 0, z: 0}
-  slowSpeed: 1
-  normalSpeed: 2
-  fastSpeed: 4
+  slowSpeed: 2
+  normalSpeed: 4
+  fastSpeed: 6
   detectionAngle: 45
   alertTime: 1
   alertLevel: 0
@@ -493,8 +493,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smoothType: 0
   subdivisions: 2
-  iterations: 4
-  strength: 0.05
+  iterations: 5
+  strength: 0.04
   uniformLength: 1
   maxSegmentLength: 0.5
   bezierTangentLength: 0.1
